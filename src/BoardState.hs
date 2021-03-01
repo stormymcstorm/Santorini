@@ -63,7 +63,6 @@ instance GameTree BoardState where
 
   value (Won _) = maxBound 
   value (Lost _) = minBound 
-  -- value 
   value _ = 0
 
   next (Won _) = [] 
