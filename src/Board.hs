@@ -74,7 +74,6 @@ data TurnResult = None | Win
 mkBoard :: Players -> Board
 mkBoard players = Board 0 players (mkSpaces players (replicate 25 0))
 
-
 doTurn :: Board  -- ^ The board to perform the turn on
         -> Turn  -- ^ The turn to perform
         -> (Board, TurnResult) -- ^ The updated board 
