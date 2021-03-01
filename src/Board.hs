@@ -36,10 +36,10 @@ exampleEncodedBoard = encode exampleBoard
 -- Turn
 -------------------------------------------------------------------------------
 
-data Turn = Turn Move Pos -- (to,from) build
+data Turn = Turn Move (Maybe Pos) -- (to,from) build
 
 instance Show Turn where 
-  show (Turn move pos) = show move ++ " + " ++ show pos
+  show (Turn move build) = show move ++ " + " ++ show build
 
 -------------------------------------------------------------------------------
 -- Move
@@ -78,7 +78,7 @@ mkBoard players = Board 0 players (mkSpaces players (replicate 25 0))
 doTurn :: Board  -- ^ The board to perform the turn on
         -> Turn  -- ^ The turn to perform
         -> (Board, TurnResult) -- ^ The updated board 
-doTurn b @ (Board turn (self, other) spaces) (Turn (Move(from, to)) build) = 
+doTurn (Board turn (self, other) spaces) (Turn (Move(from, to)) (Just build)) = 
   let
     players' = (other, map (\tok -> if tok == from then to else tok) self)
 
@@ -86,22 +86,36 @@ doTurn b @ (Board turn (self, other) spaces) (Turn (Move(from, to)) build) =
     to_l = levelAt spaces to
     build_l = levelAt spaces build
 
-    spaces' = Spaces (untagSpaces spaces // if to_l ==3 then [
-        (from, Unoccupied from_l)
-      , (to, Occupied to_l)
-      ] else [
+    spaces' = Spaces (untagSpaces spaces // [
         (from, Unoccupied from_l)
       , (to, Occupied to_l)
       , (build, Unoccupied (build_l + 1))
       ])
-  in (Board (turn + 1) players' spaces', if to_l == 3 then Win else None)
+  in (Board (turn + 1) players' spaces', None)
+
+doTurn (Board turn (self, other) spaces) (Turn (Move(from, to)) Nothing) = 
+  let
+    players' = (other, map (\tok -> if tok == from then to else tok) self)
+
+    from_l = levelAt spaces from
+    to_l = levelAt spaces to
+
+    spaces' = Spaces (untagSpaces spaces // [
+        (from, Unoccupied from_l)
+      , (to, Occupied to_l)
+      ])
+  in (Board (turn + 1) players' spaces', Win)
 
 possibleTurns :: Board -> [Turn]
 possibleTurns b @ (Board _ _ spaces) = do
   move @ (Move (_, to)) <- possibleMoves b
-  (build, _) <- filter (canBuild . snd) . neighbors spaces $ to
 
-  return (Turn move build)
+  if levelAt spaces to == 3 then
+    return (Turn move Nothing)
+  else do
+    (build, _) <- filter (canBuild . snd) . neighbors spaces $ to
+
+    return (Turn move (Just build))
   where
     canBuild :: Space -> Bool
     canBuild (Unoccupied l) = l < 4

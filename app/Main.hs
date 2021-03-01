@@ -23,7 +23,6 @@ handleLine :: ByteString -> ByteString
 handleLine = JSON.encode . handleState . JSON.decode
   where
     handleState :: Maybe BoardState -> BoardState
-    -- handleState (Just s) =  (\st -> trace ("out state: " ++ show st) st) . takeTurn . (\st -> trace ("in state: " ++ show st) st) $ s
     handleState (Just s) =  takeTurn s
     handleState Nothing = error "Failed to parse input"
 

@@ -51,7 +51,8 @@ instance ToJSON BoardState where
 -------------------------------------------------------------------------------
 
 takeTurn :: BoardState -> BoardState
-takeTurn = minmax 4 
+takeTurn s @ (OnePlaced _) = minmax 3 s 
+takeTurn s = minmax 4 s
 
 firstPlacement :: Player
 firstPlacement = [(1,1), (2,2)]
