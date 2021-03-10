@@ -1,5 +1,8 @@
 # Referee binary
-santorini-linux
+santorini-cards-linux
+
+# temp dir
+tmp
 
 .stack-work/
 *~

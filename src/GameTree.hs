@@ -1,7 +1,5 @@
 module GameTree where
 
-import Debug.Trace (trace)
-
 class Show a => GameTree a where
   isFinal :: a -> Bool
   value :: a -> Int 

@@ -1,33 +1,33 @@
 {-# LANGUAGE OverloadedStrings #-}
-
 module Main where
 
-import Prelude hiding (lines, unlines, interact, getLine, putStrLn)
-import Debug.Trace (trace)
-import System.IO (stdout, hSetBuffering, BufferMode(..), hFlush)
-import qualified Data.ByteString.Lazy as BL
-import Data.ByteString.Lazy (ByteString)
--- import Data.ByteString.Char8 (ByteString, putStrLn, getLine)
+import Prelude hiding (unlines)
+
+import System.IO (
+    stdout
+  , hSetBuffering
+  , BufferMode(..)
+  )
+import Data.Word (Word8)
+
 import qualified Data.Aeson as JSON
 
-import BoardState
+import qualified Data.ByteString.Lazy as B
+import Data.ByteString.Lazy ( ByteString )
 
-main :: IO ()
+
+main :: IO()
 main = do
-  hSetBuffering stdout LineBuffering 
+  hSetBuffering stdout LineBuffering
 
-  BL.interact $ unlines . map handleLine . lines
+  -- undefined 
+  B.interact $ unlines . map handleInput . splitIntoInputs
 
+handleInput :: ByteString -> ByteString 
+handleInput = id
 
-handleLine :: ByteString -> ByteString
-handleLine = JSON.encode . handleState . JSON.decode
-  where
-    handleState :: Maybe BoardState -> BoardState
-    handleState (Just s) =  takeTurn s
-    handleState Nothing = error "Failed to parse input"
+unlines :: [ByteString] -> ByteString 
+unlines = B.intercalate "\n" 
 
-lines :: ByteString -> [ByteString]
-lines =  BL.split 10
-
-unlines :: [ByteString] -> ByteString
-unlines = BL.intercalate "\n"
+splitIntoInputs :: ByteString -> [ByteString]
+splitIntoInputs = B.split 10
