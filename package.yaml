@@ -18,6 +18,7 @@ dependencies:
 - array 
 - bytestring
 - utf8-string
+- text
 
 library:
   source-dirs: src

@@ -1,6 +1,10 @@
-module GameTree where
+module Game.Tree where
 
-class Show a => GameTree a where
+-------------------------------------------------------------------------------
+-- GameTree
+-------------------------------------------------------------------------------
+
+class GameTree a where
   isFinal :: a -> Bool
   value :: a -> Int 
   next :: a -> [a]
