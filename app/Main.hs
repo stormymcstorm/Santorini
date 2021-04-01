@@ -13,8 +13,10 @@ import qualified Data.Aeson as JSON
 import qualified Data.ByteString.Lazy as B
 import Data.ByteString.Lazy ( ByteString )
 
-import Game.State ( GameState )
-import Game.Logic (takeTurn)
+import Game.State ( State )
+import Logic.State (takeTurn)
+import JSON.State ()
+-- import Debug.Trace (trace)
 
 main :: IO()
 main = do
@@ -25,7 +27,8 @@ main = do
 handleInput :: ByteString -> ByteString
 handleInput = JSON.encode . handleState . JSON.eitherDecode
   where
-    handleState :: Either String GameState -> GameState
+    handleState :: Either String State -> State
+    -- handleState (Right state) = (\s -> trace (show s) s) . takeTurn $ state
     handleState (Right state) = takeTurn state
     handleState (Left err) = error err
 
@@ -33,6 +36,5 @@ handleInput = JSON.encode . handleState . JSON.eitherDecode
 unlines :: [ByteString] -> ByteString
 unlines = B.intercalate "\n"
 
--- }{ --> ["}","{"]
 splitIntoInputs :: ByteString -> [ByteString]
 splitIntoInputs = B.split 10

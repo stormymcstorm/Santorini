@@ -3,6 +3,7 @@ santorini-cards-linux
 
 # temp dir
 tmp
+*.out
 
 # editor config
 .vscode

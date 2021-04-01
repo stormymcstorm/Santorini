@@ -3,7 +3,14 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    hackage: game-tree-0.1.0.0@sha256:93c308fd1153d0ee285c385de33daeb222258184dcbe98754e614cb2de1215f3,964
+    pantry-tree:
+      size: 300
+      sha256: 4100f7c2a3519e10ba210ceeb223249d7532fa189e9dc87cf6b8421f2f395dad
+  original:
+    hackage: game-tree-0.1.0.0@sha256:93c308fd1153d0ee285c385de33daeb222258184dcbe98754e614cb2de1215f3
 snapshots:
 - completed:
     size: 563103
